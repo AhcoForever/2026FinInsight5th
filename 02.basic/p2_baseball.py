@@ -28,7 +28,7 @@ def play_game():
 
         # 입력 검증
         if (
-            not user_input.isdigit()
+            not user_input.isdigit()  # isdigit : 값이 모두 숫자인지 확인하는 함수
             or len(user_input) != 3
             or len(set(user_input)) != 3
         ):

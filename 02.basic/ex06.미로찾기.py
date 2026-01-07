@@ -61,22 +61,24 @@ def move_mouse():
     global mouse
     global maze
 
-    # 쥐가 남쪽 볼때
+    # 남쪽 볼 때
     if mouse["direction"] == S:
-        # 동 > 서 > 남 > 북
+        # 동
         if maze[mouse["y"]][mouse["x"] + 1] == 0:
-            mouse["x"] == mouse["x"] + 1
-            mouse["direction"] == E
+            mouse["x"] = mouse["x"] + 1
+            mouse["direction"] = E
+        # 남
         elif maze[mouse["y"] + 1][mouse["x"]] == 0:
             mouse["y"] = mouse["y"] + 1
             mouse["direction"] = S
+        # 서
         elif maze[mouse["y"]][mouse["x"] - 1] == 0:
-            mouse["x"] == mouse["x"] - 1
-            mouse["direction"] == W
+            mouse["x"] = mouse["x"] - 1
+            mouse["direction"] = W
+        # 북
         else:
             mouse["y"] = mouse["y"] - 1
-            mouse["direction"] == N
-
+            mouse["direction"] = N
     # 쥐가 서쪽
     elif mouse["direction"] == W:
         # 서 > 남 > 북 > 동
@@ -112,12 +114,17 @@ def move_mouse():
     # 쥐가 동쪽
     elif mouse["direction"] == E:
         # 북 > 동 > 남 > 서
-        if maze[mouse["y" - 1][mouse["x"]] == 0 or maze[mouse["y"]][mouse]["x"]] == 3:
+        if maze[mouse["y" - 1]][mouse["x"]] == 0:
             mouse["y"] == mouse["y"] - 1
             mouse["direction"] == N
         elif maze[mouse["y"]][mouse["x"] + 1] == 0:
             mouse["x"] = mouse["x"] + 1
             mouse["direction"] == E
+        elif maze[mouse["y"] + 1][mouse["x"]] == 0:
+            mouse["direction"] == S
+        else:
+            mouse["x"] = mouse["x"] - 1
+            mouse["direction"] == W
 
 
 while maze[mouse["x"]][mouse["y"]] != 3:

@@ -10,9 +10,8 @@ def ispalindrome(input):
             return False
     return True
 
-
+# 재귀함수 이용
 def ispalendrome2(s):
-    print(s)
     if len(s) <= 1:
         return True
     if s[0] == s[-1]:

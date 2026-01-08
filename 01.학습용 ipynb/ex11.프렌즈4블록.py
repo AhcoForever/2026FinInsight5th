@@ -2,10 +2,9 @@
 def solution(m, n, board):
     answer = 0
     inx = 0
-    board.split("")
     print(board)
-    for r in m:
-        for c in n:
+    for r in range(m-1):
+        for c in range(n-1):
             
 # 좌표 값을 집앞에 넣는다. (중복제거) - set
     return answer

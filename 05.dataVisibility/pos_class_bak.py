@@ -17,7 +17,7 @@ class Table:
         self.table_no = table_no
         self.orders = []
 
-    # 테이블 총액 구하기
+    # table 총액 구하기
     def get_total(self):
         total = 0
         for order in self.orders:
@@ -34,13 +34,13 @@ class Table:
     def __str__(self):
         table = "=" * 20
         table += "\n"
-        table += f"={self.table_no:<16} = \n"
+        table += f"= {self.table_no:<16} =\n"
         table += "=" * 20
         table += "\n"
         if len(self.orders) == 0:  # 주문 내역이 없다 = 빈테이블
-            total += f"{"EMPTY:16"}"
+            table += f"= {"EMPTY":16} =\n"
         else:
-            table += f"= {self.get_total():<14,}원 = \n"
+            table += f"= {self.get_total():>14,}원 =\n"
         table += "=" * 20
         table += "\n"
         return table
@@ -60,9 +60,11 @@ class POS:
         self.tables = []
         self.menus = []
         self.is_service = False
-        self.init_system
+        self.init_system()
 
+    # 초기 데이터 불러오기
     def init_system(self):
+        # 메뉴 파일
         if os.path.exists(self.menu_file):
             menu_df = pd.read_csv(self.menu_file, header=None, names=["name", "price"])
             for _, row in menu_df.iterrows():
@@ -81,7 +83,7 @@ class POS:
 
     # 영업 종료
     def end_service(self):
-        # ToDo: 남아 있는 테이블 강제 계산
+        # 남아있는 테이블 강제 계산
         self.is_service = False
 
     # 테이블 생성
@@ -105,7 +107,6 @@ class POS:
     # 메뉴 리스트 출력
     def show_menus(self):
         if self.menus:
-
             for i, menu in enumerate(self.menus):
                 print(f"{i + 1}. {menu}")
         else:
@@ -117,7 +118,6 @@ class POS:
             print(table)
 
     # 주문하기
-    # Todo: 메뉴, 수량, 테이블번호
     def create_order(self, menu_idx, amount, table_no):
         menu = self.menus[menu_idx]
         order = Order(menu, amount)
@@ -127,29 +127,17 @@ class POS:
     def shutdown(self):
         menu_data = []
         for menu in self.menus:
-            menu_data.append(
-                {
-                    "name": menu.name,
-                    "price": menu.price,
-                }
-            )
+            menu_data.append({"name": menu.name, "price": menu.price})
+
         df = pd.DataFrame(menu_data)
         df.to_csv(
-            self.menu_file,
-            mode="w",
-            index=False,
-            header=False,
-            encoding="utf-8-sig",
+            self.menu_file, mode="w", index=False, header=False, encoding="utf-8-sig"
         )
 
-        setting_data = {"table": len(self.tables)}
+        setting_data = [{"table": len(self.tables)}]
         df = pd.DataFrame(setting_data)
         df.to_csv(
-            self.setting_file,
-            mode="w",
-            index=False,
-            header=False,
-            encoding="utf-8-sig",
+            self.setting_file, mode="w", index=False, header=False, encoding="utf-8-sig"
         )
 
     # 결제하기
@@ -158,11 +146,10 @@ class POS:
 
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         sales_data = []
-
         for o in table.orders:
             sales_data.append(
                 {
-                    "datatime": now,
+                    "datetime": now,
                     "table_no": table_no,
                     "menu_name": o.menu.name,
                     "price": o.menu.price,
@@ -170,7 +157,7 @@ class POS:
                 }
             )
         df = pd.DataFrame(sales_data)
-        # 파일이 존재하면
+
         if os.path.exists(self.sales_file):
             df.to_csv(
                 self.sales_file,
@@ -187,4 +174,5 @@ class POS:
                 header=False,
                 encoding="utf-8-sig",
             )
+
         table.clear()
